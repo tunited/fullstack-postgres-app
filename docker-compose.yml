@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ppcc-db
+    environment:
+      POSTGRES_USER: tunited
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: apex_support_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/src/config/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ppcc-backend
+    environment:
+      - PORT=5001
+      - DB_USER=tunited
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_DATABASE=apex_support_db
+      - DB_PORT=5432
+      - JWT_SECRET=supersecretkeyforapexsupportdesk2026!
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://localhost:5001/api
+    container_name: ppcc-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
