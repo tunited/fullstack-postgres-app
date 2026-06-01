@@ -253,9 +253,7 @@ export default function AdminDashboard({ onNavigateToTickets, onViewTicket }) {
             <option value="weekly">รายสัปดาห์ (Weekly)</option>
             <option value="monthly">รายเดือน (Monthly)</option>
           </select>
-          <button className="btn btn-secondary" onClick={onNavigateToTickets}>
-            📂 จัดการทิคเก็ต (Tickets)
-          </button>
+
         </div>
       </div>
 
