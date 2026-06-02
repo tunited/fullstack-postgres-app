@@ -65,6 +65,12 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
   const [modulesLimit, setModulesLimit] = useState(10);
   const [membersPage, setMembersPage] = useState(1);
   const [membersLimit, setMembersLimit] = useState(10);
+  const [errortypesPage, setErrortypesPage] = useState(1);
+  const [errortypesLimit, setErrortypesLimit] = useState(10);
+  const [categoriesPage, setCategoriesPage] = useState(1);
+  const [categoriesLimit, setCategoriesLimit] = useState(10);
+  const [rolesPage, setRolesPage] = useState(1);
+  const [rolesLimit, setRolesLimit] = useState(10);
             
   const [newPosName, setNewPosName] = useState('');
   const [editingPosId, setEditingPosId] = useState(null);
@@ -1363,141 +1369,199 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                   <div style={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
                   {/* RENDERING INTERNAL METADATA VIEW */}
-                  {configSubTab === 'errortypes' && (
-                    <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
-                      <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
-                        ⚠️ จัดการประเภทข้อผิดพลาด (Error Types)
-                      </h3>
+                  {configSubTab === 'errortypes' && (() => {
+                    const totalItems = configErrorTypes.length;
+                    const totalPages = Math.ceil(totalItems / errortypesLimit);
+                    const indexOfLastItem = errortypesPage * errortypesLimit;
+                    const indexOfFirstItem = indexOfLastItem - errortypesLimit;
+                    const currentErrorTypes = configErrorTypes.slice(indexOfFirstItem, indexOfLastItem);
 
-                      <form onSubmit={handleAddErrorType} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="Error ID (เช่น C, H, PC)"
-                          value={newErrId}
-                          onChange={(e) => setNewErrId(e.target.value)}
-                          disabled={configLoading}
-                          required
-                          style={{ margin: 0, flex: 1, minWidth: '150px' }}
-                        />
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="รายละเอียด (Description)"
-                          value={newErrDesc}
-                          onChange={(e) => setNewErrDesc(e.target.value)}
-                          disabled={configLoading}
-                          required
-                          style={{ margin: 0, flex: 2, minWidth: '250px' }}
-                        />
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="หมายเหตุ (Remark)"
-                          value={newErrRemark}
-                          onChange={(e) => setNewErrRemark(e.target.value)}
-                          disabled={configLoading}
-                          style={{ margin: 0, flex: 2, minWidth: '200px' }}
-                        />
-                        <button type="submit" className="btn btn-primary" disabled={configLoading || !newErrId.trim() || !newErrDesc.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
-                          ➕ เพิ่มข้อมูล
-                        </button>
-                      </form>
+                    return (
+                      <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
+                        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
+                          ⚠️ จัดการประเภทข้อผิดพลาด (Error Types)
+                        </h3>
 
-                      <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '15%' }}>Error ID</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '35%' }}>Description</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '35%' }}>Remark</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '15%' }}>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {configErrorTypes.length === 0 ? (
-                              <tr>
-                                <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูล</td>
+                        <form onSubmit={handleAddErrorType} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="Error ID (เช่น C, H, PC)"
+                            value={newErrId}
+                            onChange={(e) => setNewErrId(e.target.value)}
+                            disabled={configLoading}
+                            required
+                            style={{ margin: 0, flex: 1, minWidth: '150px' }}
+                          />
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="รายละเอียด (Description)"
+                            value={newErrDesc}
+                            onChange={(e) => setNewErrDesc(e.target.value)}
+                            disabled={configLoading}
+                            required
+                            style={{ margin: 0, flex: 2, minWidth: '250px' }}
+                          />
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="หมายเหตุ (Remark)"
+                            value={newErrRemark}
+                            onChange={(e) => setNewErrRemark(e.target.value)}
+                            disabled={configLoading}
+                            style={{ margin: 0, flex: 2, minWidth: '200px' }}
+                          />
+                          <button type="submit" className="btn btn-primary" disabled={configLoading || !newErrId.trim() || !newErrDesc.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
+                            ➕ เพิ่มข้อมูล
+                          </button>
+                        </form>
+
+                        {/* Pagination Controls Top */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span>แสดง</span>
+                            <select 
+                              value={errortypesLimit} 
+                              onChange={(e) => { setErrortypesLimit(Number(e.target.value)); setErrortypesPage(1); }}
+                              className="glass-input"
+                              style={{ margin: 0, padding: '0.25rem 0.5rem', minWidth: '60px' }}
+                            >
+                              <option value={10}>10</option>
+                              <option value={20}>20</option>
+                              <option value={40}>40</option>
+                              <option value={80}>80</option>
+                              <option value={100}>100</option>
+                            </select>
+                            <span>รายการ/หน้า</span>
+                          </div>
+                          <div style={{ color: '#64748b' }}>
+                            รวม {totalItems} รายการ (หน้า {errortypesPage}/{totalPages || 1})
+                          </div>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '15%' }}>Error ID</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '35%' }}>Description</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '35%' }}>Remark</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '15%' }}>Action</th>
                               </tr>
-                            ) : (
-                              configErrorTypes.map(err => (
-                                <tr key={err.error_id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                  
-                                  <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>{err.error_id}</td>
-                                  
-                                  <td style={{ padding: '1rem 0.75rem' }}>
-                                    {editingErrId === err.error_id ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingErrDesc}
-                                        onChange={(e) => setEditingErrDesc(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      err.description
-                                    )}
-                                  </td>
-                                  
-                                  <td style={{ padding: '1rem 0.75rem' }}>
-                                    {editingErrId === err.error_id ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingErrRemark}
-                                        onChange={(e) => setEditingErrRemark(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      err.remark || '-'
-                                    )}
-                                  </td>
-
-                                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
-                                    {editingErrId === err.error_id ? (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button type="button" className="btn btn-primary" onClick={() => handleUpdateErrorType(err.error_id)} style={{ padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}>💾</button>
-                                        <button type="button" className="btn btn-secondary" onClick={() => {
-                                          setEditingErrId(null);
-                                          setEditingErrDesc('');
-                                          setEditingErrRemark('');
-                                        }} style={{ padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}>❌</button>
-                                      </div>
-                                    ) : (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
-                                          onClick={() => {
-                                            setEditingErrId(err.error_id);
-                                            setEditingErrDesc(err.description);
-                                            setEditingErrRemark(err.remark || '');
-                                          }}
-                                          disabled={configLoading}
-                                        >
-                                          ✏️ แก้ไข
-                                        </button>
-                                        <button
-                                          className="btn btn-danger"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
-                                          onClick={() => handleDeleteErrorType(err.error_id)}
-                                          disabled={configLoading}
-                                        >
-                                          🗑️ ลบ
-                                        </button>
-                                      </div>
-                                    )}
-                                  </td>
+                            </thead>
+                            <tbody>
+                              {configErrorTypes.length === 0 ? (
+                                <tr>
+                                  <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูล</td>
                                 </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                              ) : (
+                                currentErrorTypes.map(err => (
+                                  <tr key={err.error_id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
+                                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
+                                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                    
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>{err.error_id}</td>
+                                    
+                                    <td style={{ padding: '1rem 0.75rem' }}>
+                                      {editingErrId === err.error_id ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingErrDesc}
+                                          onChange={(e) => setEditingErrDesc(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        err.description
+                                      )}
+                                    </td>
+                                    
+                                    <td style={{ padding: '1rem 0.75rem' }}>
+                                      {editingErrId === err.error_id ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingErrRemark}
+                                          onChange={(e) => setEditingErrRemark(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        err.remark || '-'
+                                      )}
+                                    </td>
+
+                                    <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
+                                      {editingErrId === err.error_id ? (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button type="button" className="btn btn-primary" onClick={() => handleUpdateErrorType(err.error_id)} style={{ padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}>💾</button>
+                                          <button type="button" className="btn btn-secondary" onClick={() => {
+                                            setEditingErrId(null);
+                                            setEditingErrDesc('');
+                                            setEditingErrRemark('');
+                                          }} style={{ padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}>❌</button>
+                                        </div>
+                                      ) : (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
+                                            onClick={() => {
+                                              setEditingErrId(err.error_id);
+                                              setEditingErrDesc(err.description);
+                                              setEditingErrRemark(err.remark || '');
+                                            }}
+                                            disabled={configLoading}
+                                          >
+                                            ✏️ แก้ไข
+                                          </button>
+                                          <button
+                                            className="btn btn-danger"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
+                                            onClick={() => handleDeleteErrorType(err.error_id)}
+                                            disabled={configLoading}
+                                          >
+                                            🗑️ ลบ
+                                          </button>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Pagination Controls Bottom */}
+                        {totalPages > 1 && (
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={errortypesPage === 1}
+                              onClick={() => setErrortypesPage(errortypesPage - 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              &laquo; ก่อนหน้า
+                            </button>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+                              {errortypesPage} / {totalPages}
+                            </div>
+
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={errortypesPage >= totalPages}
+                              onClick={() => setErrortypesPage(errortypesPage + 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              ถัดไป &raquo;
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                   {configSubTab === 'programtypes' && (
                     <ProgramTypeManagement />
@@ -1709,101 +1773,159 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                     );
                   })()}
 
-                  {configSubTab === 'categories' && (
-                    <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
-                      <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
-                        🏷️ จัดการหมวดหมู่ช่วยเหลือ (Categories)
-                      </h3>
+                  {configSubTab === 'categories' && (() => {
+                    const totalItems = configCategories.length;
+                    const totalPages = Math.ceil(totalItems / categoriesLimit);
+                    const indexOfLastItem = categoriesPage * categoriesLimit;
+                    const indexOfFirstItem = indexOfLastItem - categoriesLimit;
+                    const currentCategories = configCategories.slice(indexOfFirstItem, indexOfLastItem);
 
-                      <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="ชื่อหมวดหมู่ช่วยเหลือ เช่น Hardware"
-                          value={newCatName}
-                          onChange={(e) => setNewCatName(e.target.value)}
-                          disabled={configLoading}
-                          required
-                          style={{ margin: 0, flex: 1 }}
-                        />
-                        <button type="submit" className="btn btn-primary" disabled={configLoading || !newCatName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
-                          ➕ เพิ่มหมวดหมู่
-                        </button>
-                      </form>
+                    return (
+                      <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
+                        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
+                          🏷️ จัดการหมวดหมู่ช่วยเหลือ (Categories)
+                        </h3>
 
-                      <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Category Name</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '120px' }}>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {configCategories.length === 0 ? (
-                              <tr>
-                                <td colSpan="2" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลหมวดหมู่</td>
+                        <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="ชื่อหมวดหมู่ช่วยเหลือ เช่น Hardware"
+                            value={newCatName}
+                            onChange={(e) => setNewCatName(e.target.value)}
+                            disabled={configLoading}
+                            required
+                            style={{ margin: 0, flex: 1 }}
+                          />
+                          <button type="submit" className="btn btn-primary" disabled={configLoading || !newCatName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
+                            ➕ เพิ่มหมวดหมู่
+                          </button>
+                        </form>
+
+                        {/* Pagination Controls Top */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span>แสดง</span>
+                            <select 
+                              value={categoriesLimit} 
+                              onChange={(e) => { setCategoriesLimit(Number(e.target.value)); setCategoriesPage(1); }}
+                              className="glass-input"
+                              style={{ margin: 0, padding: '0.25rem 0.5rem', minWidth: '60px' }}
+                            >
+                              <option value={10}>10</option>
+                              <option value={20}>20</option>
+                              <option value={40}>40</option>
+                              <option value={80}>80</option>
+                              <option value={100}>100</option>
+                            </select>
+                            <span>รายการ/หน้า</span>
+                          </div>
+                          <div style={{ color: '#64748b' }}>
+                            รวม {totalItems} รายการ (หน้า {categoriesPage}/{totalPages || 1})
+                          </div>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Category Name</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '120px' }}>Action</th>
                               </tr>
-                            ) : (
-                              configCategories.map(cat => (
-                                <tr key={cat.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                  <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
-                                    {editingCategoryName === cat.name ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingCategoryNewName}
-                                        onChange={(e) => setEditingCategoryNewName(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      cat.name
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
-                                    {editingCategoryName === cat.name ? (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button className="btn btn-primary" onClick={() => handleUpdateCategory(cat.name)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
-                                          💾 บันทึก
-                                        </button>
-                                        <button className="btn btn-secondary" onClick={() => { setEditingCategoryName(null); setEditingCategoryNewName(''); }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
-                                          ❌ ยกเลิก
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
-                                          onClick={() => {
-                                            setEditingCategoryName(cat.name);
-                                            setEditingCategoryNewName(cat.name);
-                                          }}
-                                          disabled={configLoading}
-                                        >
-                                          ✏️ แก้ไข
-                                        </button>
-                                        <button
-                                          className="btn btn-danger"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
-                                          onClick={() => handleDeleteCategory(cat.name)}
-                                          disabled={configLoading || configCategories.length <= 1}
-                                        >
-                                          🗑️ ลบ
-                                        </button>
-                                      </div>
-                                    )}
-                                  </td>
+                            </thead>
+                            <tbody>
+                              {configCategories.length === 0 ? (
+                                <tr>
+                                  <td colSpan="2" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลหมวดหมู่</td>
                                 </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                              ) : (
+                                currentCategories.map(cat => (
+                                  <tr key={cat.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
+                                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
+                                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
+                                      {editingCategoryName === cat.name ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingCategoryNewName}
+                                          onChange={(e) => setEditingCategoryNewName(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        cat.name
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
+                                      {editingCategoryName === cat.name ? (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button className="btn btn-primary" onClick={() => handleUpdateCategory(cat.name)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
+                                            💾 บันทึก
+                                          </button>
+                                          <button className="btn btn-secondary" onClick={() => { setEditingCategoryName(null); setEditingCategoryNewName(''); }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
+                                            ❌ ยกเลิก
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                            onClick={() => {
+                                              setEditingCategoryName(cat.name);
+                                              setEditingCategoryNewName(cat.name);
+                                            }}
+                                            disabled={configLoading}
+                                          >
+                                            ✏️ แก้ไข
+                                          </button>
+                                          <button
+                                            className="btn btn-danger"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                            onClick={() => handleDeleteCategory(cat.name)}
+                                            disabled={configLoading || configCategories.length <= 1}
+                                          >
+                                            🗑️ ลบ
+                                          </button>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Pagination Controls Bottom */}
+                        {totalPages > 1 && (
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={categoriesPage === 1}
+                              onClick={() => setCategoriesPage(categoriesPage - 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              &laquo; ก่อนหน้า
+                            </button>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+                              {categoriesPage} / {totalPages}
+                            </div>
+
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={categoriesPage >= totalPages}
+                              onClick={() => setCategoriesPage(categoriesPage + 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              ถัดไป &raquo;
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                   {configSubTab === 'modules' && (() => {
                     const totalModules = configModules.length;
@@ -1996,138 +2118,196 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                     );
                   })()}
 
-                  {configSubTab === 'roles' && (
-                    <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
-                      <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
-                        🔑 จัดการสิทธิ์ (Roles)
-                      </h3>
+                  {configSubTab === 'roles' && (() => {
+                    const totalItems = configRoles.length;
+                    const totalPages = Math.ceil(totalItems / rolesLimit);
+                    const indexOfLastItem = rolesPage * rolesLimit;
+                    const indexOfFirstItem = indexOfLastItem - rolesLimit;
+                    const currentRoles = configRoles.slice(indexOfFirstItem, indexOfLastItem);
 
-                      <form onSubmit={handleAddRole} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="ชื่อ Role"
-                          value={newRoleName}
-                          onChange={(e) => setNewRoleName(e.target.value)}
-                          disabled={configLoading}
-                          required
-                          style={{ margin: 0, flex: 1, minWidth: '200px' }}
-                        />
-                        <select
-                          className="glass-input"
-                          value={newRoleBase}
-                          onChange={(e) => setNewRoleBase(e.target.value)}
-                          disabled={configLoading}
-                          style={{ margin: 0, width: '200px' }}
-                        >
-                          <option value="customer">สิทธิ์: Customer</option>
-                          <option value="agent">สิทธิ์: Agent</option>
-                          <option value="admin">สิทธิ์: Admin</option>
-                        </select>
-                        <button type="submit" className="btn btn-primary" disabled={configLoading || !newRoleName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
-                          ➕ เพิ่ม Role
-                        </button>
-                      </form>
+                    return (
+                      <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
+                        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
+                          🔑 จัดการสิทธิ์ (Roles)
+                        </h3>
 
-                      <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Role Name</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '200px' }}>Base Permission</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '200px' }}>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {configRoles.length === 0 ? (
-                              <tr>
-                                <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลสิทธิ์</td>
+                        <form onSubmit={handleAddRole} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="ชื่อ Role"
+                            value={newRoleName}
+                            onChange={(e) => setNewRoleName(e.target.value)}
+                            disabled={configLoading}
+                            required
+                            style={{ margin: 0, flex: 1, minWidth: '200px' }}
+                          />
+                          <select
+                            className="glass-input"
+                            value={newRoleBase}
+                            onChange={(e) => setNewRoleBase(e.target.value)}
+                            disabled={configLoading}
+                            style={{ margin: 0, width: '200px' }}
+                          >
+                            <option value="customer">สิทธิ์: Customer</option>
+                            <option value="agent">สิทธิ์: Agent</option>
+                            <option value="admin">สิทธิ์: Admin</option>
+                          </select>
+                          <button type="submit" className="btn btn-primary" disabled={configLoading || !newRoleName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
+                            ➕ เพิ่ม Role
+                          </button>
+                        </form>
+
+                        {/* Pagination Controls Top */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span>แสดง</span>
+                            <select 
+                              value={rolesLimit} 
+                              onChange={(e) => { setRolesLimit(Number(e.target.value)); setRolesPage(1); }}
+                              className="glass-input"
+                              style={{ margin: 0, padding: '0.25rem 0.5rem', minWidth: '60px' }}
+                            >
+                              <option value={10}>10</option>
+                              <option value={20}>20</option>
+                              <option value={40}>40</option>
+                              <option value={80}>80</option>
+                              <option value={100}>100</option>
+                            </select>
+                            <span>รายการ/หน้า</span>
+                          </div>
+                          <div style={{ color: '#64748b' }}>
+                            รวม {totalItems} รายการ (หน้า {rolesPage}/{totalPages || 1})
+                          </div>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Role Name</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '200px' }}>Base Permission</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '200px' }}>Action</th>
                               </tr>
-                            ) : (
-                              configRoles.map(role => (
-                                <tr key={role.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                  <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
-                                    {editingRoleId === role.id ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingRoleName}
-                                        onChange={(e) => setEditingRoleName(e.target.value)}
-                                        autoFocus
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      role.name
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem' }}>
-                                    {editingRoleId === role.id ? (
-                                      <select
-                                        className="glass-input"
-                                        value={editingRoleBase}
-                                        onChange={(e) => setEditingRoleBase(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      >
-                                        <option value="customer">Customer</option>
-                                        <option value="agent">Agent</option>
-                                        <option value="admin">Admin</option>
-                                      </select>
-                                    ) : (
-                                      <span className={`badge-role`} style={{ display: 'inline-block', background: 'rgba(99, 102, 241, 0.1)', color: '#4f46e5', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600 }}>
-                                        {role.base_role}
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
-                                    {editingRoleId === role.id ? (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button className="btn btn-primary" onClick={() => handleUpdateRole(role.id, editingRoleName, editingRoleBase)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}>
-                                          💾
-                                        </button>
-                                        <button className="btn btn-secondary" onClick={() => {
-                                          setEditingRoleId(null);
-                                          setEditingRoleName('');
-                                          setEditingRoleBase('');
-                                        }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}>
-                                          ❌
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
-                                          onClick={() => {
-                                            setEditingRoleId(role.id);
-                                            setEditingRoleName(role.name);
-                                            setEditingRoleBase(role.base_role);
-                                          }}
-                                          disabled={configLoading}
-                                        >
-                                          ✏️ แก้ไข
-                                        </button>
-                                        <button
-                                          className="btn btn-danger"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
-                                          onClick={() => handleDeleteRole(role.id, role.name)}
-                                          disabled={configLoading || ['Customer', 'Agent', 'Admin'].includes(role.name)}
-                                          title={['Customer', 'Agent', 'Admin'].includes(role.name) ? "ไม่สามารถลบ Role พื้นฐานของระบบได้" : ""}
-                                        >
-                                          🗑️ ลบ
-                                        </button>
-                                      </div>
-                                    )}
-                                  </td>
+                            </thead>
+                            <tbody>
+                              {configRoles.length === 0 ? (
+                                <tr>
+                                  <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลสิทธิ์</td>
                                 </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                              ) : (
+                                currentRoles.map(role => (
+                                  <tr key={role.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
+                                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
+                                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
+                                      {editingRoleId === role.id ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingRoleName}
+                                          onChange={(e) => setEditingRoleName(e.target.value)}
+                                          autoFocus
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        role.name
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem' }}>
+                                      {editingRoleId === role.id ? (
+                                        <select
+                                          className="glass-input"
+                                          value={editingRoleBase}
+                                          onChange={(e) => setEditingRoleBase(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        >
+                                          <option value="customer">Customer</option>
+                                          <option value="agent">Agent</option>
+                                          <option value="admin">Admin</option>
+                                        </select>
+                                      ) : (
+                                        <span className={`badge-role`} style={{ display: 'inline-block', background: 'rgba(99, 102, 241, 0.1)', color: '#4f46e5', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600 }}>
+                                          {role.base_role}
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
+                                      {editingRoleId === role.id ? (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button className="btn btn-primary" onClick={() => handleUpdateRole(role.id, editingRoleName, editingRoleBase)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}>
+                                            💾
+                                          </button>
+                                          <button className="btn btn-secondary" onClick={() => {
+                                            setEditingRoleId(null);
+                                            setEditingRoleName('');
+                                            setEditingRoleBase('');
+                                          }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}>
+                                            ❌
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
+                                            onClick={() => {
+                                              setEditingRoleId(role.id);
+                                              setEditingRoleName(role.name);
+                                              setEditingRoleBase(role.base_role);
+                                            }}
+                                            disabled={configLoading}
+                                          >
+                                            ✏️ แก้ไข
+                                          </button>
+                                          <button
+                                            className="btn btn-danger"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px' }}
+                                            onClick={() => handleDeleteRole(role.id, role.name)}
+                                            disabled={configLoading || ['Customer', 'Agent', 'Admin'].includes(role.name)}
+                                            title={['Customer', 'Agent', 'Admin'].includes(role.name) ? "ไม่สามารถลบ Role พื้นฐานของระบบได้" : ""}
+                                          >
+                                            🗑️ ลบ
+                                          </button>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Pagination Controls Bottom */}
+                        {totalPages > 1 && (
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={rolesPage === 1}
+                              onClick={() => setRolesPage(rolesPage - 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              &laquo; ก่อนหน้า
+                            </button>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+                              {rolesPage} / {totalPages}
+                            </div>
+
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={rolesPage >= totalPages}
+                              onClick={() => setRolesPage(rolesPage + 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              ถัดไป &raquo;
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                   </div>
                 </div>
               </div>

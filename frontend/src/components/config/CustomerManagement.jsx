@@ -6,6 +6,8 @@ const CustomerManagement = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   // Add form state
   const [newCustNum, setNewCustNum] = useState('');
@@ -17,6 +19,12 @@ const CustomerManagement = () => {
   const [editingCustNum, setEditingCustNum] = useState('');
   const [editingCustName, setEditingCustName] = useState('');
   const [editingContactEmail, setEditingContactEmail] = useState('');
+
+  const totalItems = customers.length;
+  const totalPages = Math.ceil(totalItems / limit);
+  const indexOfLastItem = page * limit;
+  const indexOfFirstItem = indexOfLastItem - limit;
+  const currentCustomers = customers.slice(indexOfFirstItem, indexOfLastItem);
 
   const fetchCustomers = async () => {
     try {
@@ -154,6 +162,29 @@ const CustomerManagement = () => {
         </button>
       </form>
 
+      {/* Pagination Controls Top */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span>แสดง</span>
+          <select 
+            value={limit} 
+            onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
+            className="glass-input"
+            style={{ margin: 0, padding: '0.2rem 0.5rem', minWidth: '60px' }}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={40}>40</option>
+            <option value={80}>80</option>
+            <option value={100}>100</option>
+          </select>
+          <span>รายการ/หน้า</span>
+        </div>
+        <div style={{ color: '#64748b' }}>
+          รวม {totalItems} รายการ (หน้า {page}/{totalPages || 1})
+        </div>
+      </div>
+
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
           <thead>
@@ -170,7 +201,7 @@ const CustomerManagement = () => {
                 <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลลูกค้า</td>
               </tr>
             ) : (
-              customers.map(c => (
+              currentCustomers.map(c => (
                 <tr key={c.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
@@ -258,6 +289,33 @@ const CustomerManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls Bottom */}
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+          <button 
+            className="btn btn-secondary" 
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            style={{ padding: '0.5rem 1rem' }}
+          >
+            &laquo; ก่อนหน้า
+          </button>
+          
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+            {page} / {totalPages}
+          </div>
+
+          <button 
+            className="btn btn-secondary" 
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+            style={{ padding: '0.5rem 1rem' }}
+          >
+            ถัดไป &raquo;
+          </button>
+        </div>
+      )}
     </div>
   );
 };
