@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS modules (
   description VARCHAR(255)
 );
 
+-- Module Program Groups Table
+CREATE TABLE IF NOT EXISTS module_program_group (
+  id SERIAL PRIMARY KEY,
+  module VARCHAR(100),
+  program_group VARCHAR(255),
+  note VARCHAR(255)
+);
+
 -- Program Types Table
 CREATE TABLE IF NOT EXISTS program_types (
   id SERIAL PRIMARY KEY,
