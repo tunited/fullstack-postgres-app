@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS categories (
 -- Modules Table (Dynamic metadata)
 CREATE TABLE IF NOT EXISTS modules (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100) UNIQUE NOT NULL
+  name VARCHAR(100) UNIQUE NOT NULL,
+  description VARCHAR(255)
 );
 
 -- Program Types Table

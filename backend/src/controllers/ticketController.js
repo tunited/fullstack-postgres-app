@@ -704,7 +704,7 @@ export const getModules = async (req, res) => {
 };
 
 export const createModule = async (req, res) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
   if (!name || name.trim() === '') {
     return res.status(400).json({ error: 'Module name is required.' });
   }
@@ -716,8 +716,8 @@ export const createModule = async (req, res) => {
     }
 
     const result = await pool.query(
-      'INSERT INTO modules (name) VALUES ($1) RETURNING *',
-      [name.trim()]
+      'INSERT INTO modules (name, description) VALUES ($1, $2) RETURNING *',
+      [name.trim(), description || null]
     );
     return res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -753,7 +753,7 @@ export const deleteModule = async (req, res) => {
 
 export const updateModule = async (req, res) => {
   const { name } = req.params;
-  const { newName } = req.body;
+  const { newName, description } = req.body;
 
   if (!newName || !newName.trim()) {
     return res.status(400).json({ error: 'New module name is required.' });
@@ -768,8 +768,8 @@ export const updateModule = async (req, res) => {
     await pool.query('BEGIN');
 
     const result = await pool.query(
-      'UPDATE modules SET name = $1 WHERE name = $2 RETURNING *',
-      [newName.trim(), name]
+      'UPDATE modules SET name = $1, description = $3 WHERE name = $2 RETURNING *',
+      [newName.trim(), name, description || null]
     );
 
     if (result.rows.length === 0) {

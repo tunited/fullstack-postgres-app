@@ -55,8 +55,10 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
   const [editingCategoryNewName, setEditingCategoryNewName] = useState('');
 
   const [newModName, setNewModName] = useState('');
+  const [newModDesc, setNewModDesc] = useState('');
   const [editingModuleName, setEditingModuleName] = useState(null);
   const [editingModuleNewName, setEditingModuleNewName] = useState('');
+  const [editingModuleNewDesc, setEditingModuleNewDesc] = useState('');
             
   const [newPosName, setNewPosName] = useState('');
   const [editingPosId, setEditingPosId] = useState(null);
@@ -354,13 +356,14 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ name: newModName.trim() })
+        body: JSON.stringify({ name: newModName.trim(), description: newModDesc.trim() })
       });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to add module');
 
       setNewModName('');
+      setNewModDesc('');
       setConfigSuccess(`เพิ่มระบบงานโมดูล "${data.name}" เรียบร้อยแล้ว`);
       await fetchConfigData();
     } catch (err) {
@@ -384,7 +387,7 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ newName: editingModuleNewName.trim() })
+        body: JSON.stringify({ newName: editingModuleNewName.trim(), description: editingModuleNewDesc.trim() })
       });
 
       const data = await response.json();
@@ -393,6 +396,7 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
       setConfigSuccess(`อัปเดตระบบงาน สำเร็จ`);
       setEditingModuleName(null);
       setEditingModuleNewName('');
+      setEditingModuleNewDesc('');
       await fetchConfigData();
     } catch (err) {
       console.error(err);
@@ -1742,16 +1746,27 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                       </h3>
 
                       <form onSubmit={handleAddModule} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                        <input
-                          type="text"
-                          className="glass-input"
-                          placeholder="ชื่อระบบงานโมดูล เช่น Purchasing"
-                          value={newModName}
-                          onChange={(e) => setNewModName(e.target.value)}
-                          disabled={configLoading}
-                          required
-                          style={{ margin: 0, flex: 1 }}
-                        />
+                        <div style={{ display: 'flex', gap: '0.75rem', flex: 1 }}>
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="ชื่อระบบงานโมดูล เช่น Purchasing"
+                            value={newModName}
+                            onChange={(e) => setNewModName(e.target.value)}
+                            disabled={configLoading}
+                            required
+                            style={{ margin: 0, flex: 1 }}
+                          />
+                          <input
+                            type="text"
+                            className="glass-input"
+                            placeholder="คำอธิบาย (Description)"
+                            value={newModDesc}
+                            onChange={(e) => setNewModDesc(e.target.value)}
+                            disabled={configLoading}
+                            style={{ margin: 0, flex: 2 }}
+                          />
+                        </div>
                         <button type="submit" className="btn btn-primary" disabled={configLoading || !newModName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
                           ➕ เพิ่มระบบงาน
                         </button>
@@ -1761,14 +1776,15 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
                           <thead>
                             <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Module Name</th>
+                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '30%' }}>Module Name</th>
+                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Description</th>
                               <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '120px' }}>Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             {configModules.length === 0 ? (
                               <tr>
-                                <td colSpan="2" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลระบบงาน</td>
+                                <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลระบบงาน</td>
                               </tr>
                             ) : (
                               configModules.map(mod => (
@@ -1786,6 +1802,19 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                                       />
                                     ) : (
                                       mod.name
+                                    )}
+                                  </td>
+                                  <td style={{ padding: '1rem 0.75rem', color: '#64748b' }}>
+                                    {editingModuleName === mod.name ? (
+                                      <input
+                                        type="text"
+                                        className="glass-input"
+                                        value={editingModuleNewDesc}
+                                        onChange={(e) => setEditingModuleNewDesc(e.target.value)}
+                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                      />
+                                    ) : (
+                                      mod.description || '-'
                                     )}
                                   </td>
                                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
@@ -1806,6 +1835,7 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                                           onClick={() => {
                                             setEditingModuleName(mod.name);
                                             setEditingModuleNewName(mod.name);
+                                            setEditingModuleNewDesc(mod.description || '');
                                           }}
                                           disabled={configLoading}
                                         >
