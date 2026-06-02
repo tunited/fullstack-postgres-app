@@ -30,7 +30,12 @@ const customers = [
   { cust_num: 'SST', cust_name: 'SIAM SENATER CO., LTD.' },
   { cust_num: 'TAIYO', cust_name: 'TAIYO CABLETEC (THAILAND) CO.,LTD.' },
   { cust_num: 'TAK', cust_name: 'T.A.K.PACKAGING CO., LTD.' },
-  { cust_num: 'TTSC', cust_name: 'THAI TAKAGI SEIKO CO.,LTD.' }
+  { cust_num: 'TTSC', cust_name: 'THAI TAKAGI SEIKO CO.,LTD.' },
+  { cust_num: 'TBFST', cust_name: 'TBFST' },
+  { cust_num: 'CNI', cust_name: 'C.N.I ENGINEERING SUPPLY Co., Ltd.' },
+  { cust_num: 'SSMC', cust_name: 'SSMC' },
+  { cust_num: 'IIT', cust_name: 'IIT' },
+  { cust_num: 'CIS', cust_name: 'CIS' }
 ];
 
 async function seedCustomers() {
