@@ -61,6 +61,8 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
   const [editingModuleName, setEditingModuleName] = useState(null);
   const [editingModuleNewName, setEditingModuleNewName] = useState('');
   const [editingModuleNewDesc, setEditingModuleNewDesc] = useState('');
+  const [modulesPage, setModulesPage] = useState(1);
+  const [modulesLimit, setModulesLimit] = useState(10);
             
   const [newPosName, setNewPosName] = useState('');
   const [editingPosId, setEditingPosId] = useState(null);
@@ -1743,138 +1745,196 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                     </div>
                   )}
 
-                  {configSubTab === 'modules' && (
-                    <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
-                      <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
-                        🧩 จัดการระบบงานโมดูล (Modules)
-                      </h3>
+                  {configSubTab === 'modules' && (() => {
+                    const totalModules = configModules.length;
+                    const totalModulesPages = Math.ceil(totalModules / modulesLimit);
+                    const indexOfLastModule = modulesPage * modulesLimit;
+                    const indexOfFirstModule = indexOfLastModule - modulesLimit;
+                    const currentModules = configModules.slice(indexOfFirstModule, indexOfLastModule);
 
-                      <form onSubmit={handleAddModule} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                        <div style={{ display: 'flex', gap: '0.75rem', flex: 1 }}>
-                          <input
-                            type="text"
-                            className="glass-input"
-                            placeholder="ชื่อระบบงานโมดูล เช่น Purchasing"
-                            value={newModName}
-                            onChange={(e) => setNewModName(e.target.value)}
-                            disabled={configLoading}
-                            required
-                            style={{ margin: 0, flex: 1 }}
-                          />
-                          <input
-                            type="text"
-                            className="glass-input"
-                            placeholder="คำอธิบาย (Description)"
-                            value={newModDesc}
-                            onChange={(e) => setNewModDesc(e.target.value)}
-                            disabled={configLoading}
-                            style={{ margin: 0, flex: 2 }}
-                          />
+                    return (
+                      <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
+                        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', color: '#0f172a', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem' }}>
+                          🧩 จัดการระบบงานโมดูล (Modules)
+                        </h3>
+
+                        <form onSubmit={handleAddModule} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                          <div style={{ display: 'flex', gap: '0.75rem', flex: 1 }}>
+                            <input
+                              type="text"
+                              className="glass-input"
+                              placeholder="ชื่อระบบงานโมดูล เช่น Purchasing"
+                              value={newModName}
+                              onChange={(e) => setNewModName(e.target.value)}
+                              disabled={configLoading}
+                              required
+                              style={{ margin: 0, flex: 1 }}
+                            />
+                            <input
+                              type="text"
+                              className="glass-input"
+                              placeholder="คำอธิบาย (Description)"
+                              value={newModDesc}
+                              onChange={(e) => setNewModDesc(e.target.value)}
+                              disabled={configLoading}
+                              style={{ margin: 0, flex: 2 }}
+                            />
+                          </div>
+                          <button type="submit" className="btn btn-primary" disabled={configLoading || !newModName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
+                            ➕ เพิ่มระบบงาน
+                          </button>
+                        </form>
+
+                        {/* Pagination Controls Top */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span>แสดง</span>
+                            <select 
+                              value={modulesLimit} 
+                              onChange={(e) => { setModulesLimit(Number(e.target.value)); setModulesPage(1); }}
+                              className="glass-input"
+                              style={{ margin: 0, padding: '0.2rem 0.5rem', minWidth: '60px' }}
+                            >
+                              <option value={10}>10</option>
+                              <option value={20}>20</option>
+                              <option value={40}>40</option>
+                              <option value={80}>80</option>
+                              <option value={100}>100</option>
+                            </select>
+                            <span>รายการ/หน้า</span>
+                          </div>
+                          <div style={{ color: '#64748b' }}>
+                            รวม {totalModules} รายการ (หน้า {modulesPage}/{totalModulesPages || 1})
+                          </div>
                         </div>
-                        <button type="submit" className="btn btn-primary" disabled={configLoading || !newModName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
-                          ➕ เพิ่มระบบงาน
-                        </button>
-                      </form>
 
-                      <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '30%' }}>Module Name</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Description</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '120px' }}>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {configModules.length === 0 ? (
-                              <tr>
-                                <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลระบบงาน</td>
+                        <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '30%' }}>Module Name</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left' }}>Description</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '120px' }}>Action</th>
                               </tr>
-                            ) : (
-                              configModules.map(mod => (
-                                <tr key={mod.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                  <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
-                                    {editingModuleName === mod.name ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingModuleNewName}
-                                        onChange={(e) => setEditingModuleNewName(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      mod.name
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', color: '#64748b' }}>
-                                    {editingModuleName === mod.name ? (
-                                      <input
-                                        type="text"
-                                        className="glass-input"
-                                        value={editingModuleNewDesc}
-                                        onChange={(e) => setEditingModuleNewDesc(e.target.value)}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
-                                      />
-                                    ) : (
-                                      mod.description || '-'
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
-                                    {editingModuleName === mod.name ? (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button className="btn btn-primary" onClick={() => handleUpdateModule(mod.name)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
-                                          💾 บันทึก
-                                        </button>
-                                        <button className="btn btn-secondary" onClick={() => { setEditingModuleName(null); setEditingModuleNewName(''); }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
-                                          ❌ ยกเลิก
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
-                                          onClick={() => {
-                                            setModuleProgramFilter(mod.name);
-                                            setConfigSubTab('module-programs');
-                                          }}
-                                          title="จัดการโปรแกรมย่อย"
-                                        >
-                                          ⚙️ จัดการโปรแกรมย่อย
-                                        </button>
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
-                                          onClick={() => {
-                                            setEditingModuleName(mod.name);
-                                            setEditingModuleNewName(mod.name);
-                                            setEditingModuleNewDesc(mod.description || '');
-                                          }}
-                                          disabled={configLoading}
-                                        >
-                                          ✏️ แก้ไข
-                                        </button>
-                                        <button
-                                          className="btn btn-danger"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
-                                          onClick={() => handleDeleteModule(mod.name)}
-                                          disabled={configLoading || configModules.length <= 1}
-                                        >
-                                          🗑️ ลบ
-                                        </button>
-                                      </div>
-                                    )}
-                                  </td>
+                            </thead>
+                            <tbody>
+                              {configModules.length === 0 ? (
+                                <tr>
+                                  <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลระบบงาน</td>
                                 </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                              ) : (
+                                currentModules.map(mod => (
+                                  <tr key={mod.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
+                                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0, 75, 181, 0.02)'}
+                                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: 600 }}>
+                                      {editingModuleName === mod.name ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingModuleNewName}
+                                          onChange={(e) => setEditingModuleNewName(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        mod.name
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', color: '#64748b' }}>
+                                      {editingModuleName === mod.name ? (
+                                        <input
+                                          type="text"
+                                          className="glass-input"
+                                          value={editingModuleNewDesc}
+                                          onChange={(e) => setEditingModuleNewDesc(e.target.value)}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                                        />
+                                      ) : (
+                                        mod.description || '-'
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
+                                      {editingModuleName === mod.name ? (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button className="btn btn-primary" onClick={() => handleUpdateModule(mod.name)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
+                                            💾 บันทึก
+                                          </button>
+                                          <button className="btn btn-secondary" onClick={() => { setEditingModuleName(null); setEditingModuleNewName(''); }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
+                                            ❌ ยกเลิก
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                            onClick={() => {
+                                              setModuleProgramFilter(mod.name);
+                                              setConfigSubTab('module-programs');
+                                            }}
+                                            title="จัดการโปรแกรมย่อย"
+                                          >
+                                            ⚙️ จัดการโปรแกรมย่อย
+                                          </button>
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                            onClick={() => {
+                                              setEditingModuleName(mod.name);
+                                              setEditingModuleNewName(mod.name);
+                                              setEditingModuleNewDesc(mod.description || '');
+                                            }}
+                                            disabled={configLoading}
+                                          >
+                                            ✏️ แก้ไข
+                                          </button>
+                                          <button
+                                            className="btn btn-danger"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
+                                            onClick={() => handleDeleteModule(mod.name)}
+                                            disabled={configLoading || configModules.length <= 1}
+                                          >
+                                            🗑️ ลบ
+                                          </button>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Pagination Controls Bottom */}
+                        {totalModulesPages > 1 && (
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={modulesPage === 1}
+                              onClick={() => setModulesPage(modulesPage - 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              &laquo; ก่อนหน้า
+                            </button>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+                              {modulesPage} / {totalModulesPages}
+                            </div>
+
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={modulesPage >= totalModulesPages}
+                              onClick={() => setModulesPage(modulesPage + 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              ถัดไป &raquo;
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                   {configSubTab === 'roles' && (
                     <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
