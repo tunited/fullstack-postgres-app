@@ -38,7 +38,7 @@ const ModuleProgramManagement = ({ initialModuleFilter = '' }) => {
         queryParams.append('module', moduleFilter);
       }
 
-      const response = await fetch(`${API_URL}/config/module-program-groups?${queryParams.toString()}`, {
+      const response = await fetch(`${API_URL}/tickets/config/module-program-groups?${queryParams.toString()}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -70,7 +70,7 @@ const ModuleProgramManagement = ({ initialModuleFilter = '' }) => {
     e.preventDefault();
     setError(null);
     try {
-      const response = await fetch(`${API_URL}/config/module-program-groups`, {
+      const response = await fetch(`${API_URL}/tickets/config/module-program-groups`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const ModuleProgramManagement = ({ initialModuleFilter = '' }) => {
   const handleUpdateProgram = async (id) => {
     setError(null);
     try {
-      const response = await fetch(`${API_URL}/config/module-program-groups/${id}`, {
+      const response = await fetch(`${API_URL}/tickets/config/module-program-groups/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ const ModuleProgramManagement = ({ initialModuleFilter = '' }) => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this program?')) return;
     try {
-      const response = await fetch(`${API_URL}/config/module-program-groups/${id}`, {
+      const response = await fetch(`${API_URL}/tickets/config/module-program-groups/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
