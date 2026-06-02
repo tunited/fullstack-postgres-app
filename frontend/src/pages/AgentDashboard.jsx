@@ -63,6 +63,8 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
   const [editingModuleNewDesc, setEditingModuleNewDesc] = useState('');
   const [modulesPage, setModulesPage] = useState(1);
   const [modulesLimit, setModulesLimit] = useState(10);
+  const [membersPage, setMembersPage] = useState(1);
+  const [membersLimit, setMembersLimit] = useState(10);
             
   const [newPosName, setNewPosName] = useState('');
   const [editingPosId, setEditingPosId] = useState(null);
@@ -1507,8 +1509,14 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                   
                   {configSubTab === 'customers' && <CustomerManagement />}
                   {configSubTab === 'module-programs' && <ModuleProgramManagement initialModuleFilter={moduleProgramFilter} />}
-                  {configSubTab === 'members' && (
-                    members.length === 0 ? (
+                  {configSubTab === 'members' && (() => {
+                    const totalMembers = members.length;
+                    const totalMembersPages = Math.ceil(totalMembers / membersLimit);
+                    const indexOfLastMember = membersPage * membersLimit;
+                    const indexOfFirstMember = indexOfLastMember - membersLimit;
+                    const currentMembers = members.slice(indexOfFirstMember, indexOfLastMember);
+
+                    return members.length === 0 ? (
                       <div className="glass-card empty-state">
                         <span className="empty-icon">👥</span>
                         <h3>ไม่มีสมาชิกในระบบ</h3>
@@ -1516,138 +1524,190 @@ export default function AgentDashboard({ onViewTicket, initialTab = 'queue' }) {
                       </div>
                     ) : (
                       <div className="glass-card" style={{ padding: '1.5rem', overflowX: 'auto', textAlign: 'left' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', color: '#0f172a', minWidth: '700px' }}>
-                          <thead>
-                            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap', width: '80px' }}>ID</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Name</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>CustNum</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Email</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Role</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap', width: '60px' }}>Status</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Joined</th>
-                              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {members.map(member => {
-                              const isSelf = member.id === user.id;
-                              return (
-                                <tr 
-                                  key={member.id} 
-                                  style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
-                                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(99, 102, 241, 0.035)'}
-                                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                >
-                                  <td style={{ padding: '1rem 0.75rem', fontFamily: 'monospace', fontWeight: 500, color: '#475569', whiteSpace: 'nowrap' }}>
-                                    #{String(member.id).padStart(3, '0')}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>
-                                    {member.name} {isSelf && <span style={{ color: 'var(--accent-purple)', fontSize: '0.8rem', fontWeight: 600 }}> (คุณ)</span>}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', color: '#475569', whiteSpace: 'nowrap' }}>
-                                    {editingMemberId === member.id ? (
-                                      <select
-                                        className="glass-input"
-                                        value={editingMemberData.custNum || ''}
-                                        onChange={(e) => setEditingMemberData({...editingMemberData, custNum: e.target.value})}
-                                        style={{ margin: 0, padding: '0.25rem 0.5rem', width: '200px', fontSize: '0.85rem' }}
-                                      >
-                                        <option value="">-- ไม่ระบุ (None) --</option>
-                                        {configCustomers.map(c => (
-                                          <option key={c.id} value={c.cust_num}>{c.cust_num} - {c.cust_name}</option>
-                                        ))}
-                                      </select>
-                                    ) : (
-                                      member.cust_num || '-'
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', color: '#475569', whiteSpace: 'nowrap' }}>
-                                    {member.email}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                    {editingMemberId === member.id ? (
-                                      <select
-                                        className="glass-input"
-                                        value={editingMemberData.role}
-                                        onChange={(e) => setEditingMemberData({...editingMemberData, role: e.target.value})}
-                                        style={{ margin: 0, padding: '0.25rem', fontSize: '0.85rem' }}
-                                        disabled={isSelf}
-                                        title={isSelf ? "ไม่สามารถเปลี่ยนสิทธิ์ของตัวเองได้" : ""}
-                                      >
-                                        {configRoles.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
-                                      </select>
-                                    ) : (
-                                      <span className={`badge-role`} style={{ display: 'inline-block', background: 'rgba(99, 102, 241, 0.1)', color: '#4f46e5', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600 }}>
-                                        {member.role || 'customer'}
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                    {member.is_verified ? (
-                                      <span className="badge badge-status-resolved" style={{ display: 'inline-block', padding: '0.25rem 0.5rem', borderRadius: '12px', fontSize: '1rem', fontWeight: 600 }} title="อนุมัติแล้ว">
-                                        ✅
-                                      </span>
-                                    ) : (
-                                      <span className="badge" style={{ display: 'inline-block', padding: '0.25rem 0.5rem', borderRadius: '12px', fontSize: '1rem', fontWeight: 600, background: 'rgba(245, 158, 11, 0.15)', color: '#d97706', border: '1px solid rgba(245, 158, 11, 0.3)' }} title="รออนุมัติ">
-                                        ⏳
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', color: '#64748b', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
-                                    {new Date(member.created_at).toLocaleDateString('th-TH')}
-                                  </td>
-                                  <td style={{ padding: '1rem 0.75rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
-                                    {editingMemberId === member.id ? (
-                                      <>
-                                        <button className="btn btn-primary" onClick={handleUpdateMember} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px' }}>
-                                          💾 เซฟ
-                                        </button>
-                                        <button className="btn btn-secondary" onClick={() => setEditingMemberId(null)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px' }}>
-                                          ❌ ยกเลิก
-                                        </button>
-                                      </>
-                                    ) : (
-                                      <>
-                                        {!member.is_verified && (
-                                          <button
-                                            className="btn"
-                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap', background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', color: '#fff' }}
-                                            onClick={() => handleApproveMember(member.id)}
-                                          >
-                                            ✅ อนุมัติ
-                                          </button>
-                                        )}
-                                        <button
-                                          className="btn btn-secondary"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap' }}
-                                          onClick={() => {
-                                            setEditingMemberId(member.id);
-                                            setEditingMemberData({ position: member.position || '', role: member.role || 'customer' });
-                                          }}
-                                        >
-                                          ✏️ แก้ไข
-                                        </button>
-                                        <button
-                                          className="btn btn-danger"
-                                          style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap' }}
-                                          onClick={() => handleDeleteMember(member.id)}
-                                          disabled={isSelf}
-                                        >
-                                          🗑️ ลบ
-                                        </button>
-                                      </>
-                                    )}
-                                  </td>
+                        {/* Pagination Controls Top */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span>แสดง</span>
+                            <select 
+                              value={membersLimit} 
+                              onChange={(e) => { setMembersLimit(Number(e.target.value)); setMembersPage(1); }}
+                              className="glass-input"
+                              style={{ margin: 0, padding: '0.25rem 0.5rem', minWidth: '60px' }}
+                            >
+                              <option value={10}>10</option>
+                              <option value={20}>20</option>
+                              <option value={40}>40</option>
+                              <option value={80}>80</option>
+                              <option value={100}>100</option>
+                            </select>
+                            <span>รายการ/หน้า</span>
+                          </div>
+                          <div style={{ color: '#64748b' }}>
+                            รวม {totalMembers} รายการ (หน้า {membersPage}/{totalMembersPages || 1})
+                          </div>
+                        </div>
 
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
+                        <div style={{ overflowX: 'auto' }}>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', color: '#0f172a', minWidth: '700px' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap', width: '80px' }}>ID</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Name</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>CustNum</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Email</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Role</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap', width: '60px' }}>Status</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Joined</th>
+                                <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {currentMembers.map(member => {
+                                const isSelf = member.id === user.id;
+                                return (
+                                  <tr 
+                                    key={member.id} 
+                                    style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background-color 0.2s' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(99, 102, 241, 0.035)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                  >
+                                    <td style={{ padding: '1rem 0.75rem', fontFamily: 'monospace', fontWeight: 500, color: '#475569', whiteSpace: 'nowrap' }}>
+                                      #{String(member.id).padStart(3, '0')}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>
+                                      {member.name} {isSelf && <span style={{ color: 'var(--accent-purple)', fontSize: '0.8rem', fontWeight: 600 }}> (คุณ)</span>}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', color: '#475569', whiteSpace: 'nowrap' }}>
+                                      {editingMemberId === member.id ? (
+                                        <select
+                                          className="glass-input"
+                                          value={editingMemberData.custNum || ''}
+                                          onChange={(e) => setEditingMemberData({...editingMemberData, custNum: e.target.value})}
+                                          style={{ margin: 0, padding: '0.25rem 0.5rem', width: '200px', fontSize: '0.85rem' }}
+                                        >
+                                          <option value="">-- ไม่ระบุ (None) --</option>
+                                          {configCustomers.map(c => (
+                                            <option key={c.id} value={c.cust_num}>{c.cust_num} - {c.cust_name}</option>
+                                          ))}
+                                        </select>
+                                      ) : (
+                                        member.cust_num || '-'
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', color: '#475569', whiteSpace: 'nowrap' }}>
+                                      {member.email}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                      {editingMemberId === member.id ? (
+                                        <select
+                                          className="glass-input"
+                                          value={editingMemberData.role}
+                                          onChange={(e) => setEditingMemberData({...editingMemberData, role: e.target.value})}
+                                          style={{ margin: 0, padding: '0.25rem', fontSize: '0.85rem' }}
+                                          disabled={isSelf}
+                                          title={isSelf ? "ไม่สามารถเปลี่ยนสิทธิ์ของตัวเองได้" : ""}
+                                        >
+                                          {configRoles.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
+                                        </select>
+                                      ) : (
+                                        <span className={`badge-role`} style={{ display: 'inline-block', background: 'rgba(99, 102, 241, 0.1)', color: '#4f46e5', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600 }}>
+                                          {member.role || 'customer'}
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                      {member.is_verified ? (
+                                        <span className="badge badge-status-resolved" style={{ display: 'inline-block', padding: '0.25rem 0.5rem', borderRadius: '12px', fontSize: '1rem', fontWeight: 600 }} title="อนุมัติแล้ว">
+                                          ✅
+                                        </span>
+                                      ) : (
+                                        <span className="badge" style={{ display: 'inline-block', padding: '0.25rem 0.5rem', borderRadius: '12px', fontSize: '1rem', fontWeight: 600, background: 'rgba(245, 158, 11, 0.15)', color: '#d97706', border: '1px solid rgba(245, 158, 11, 0.3)' }} title="รออนุมัติ">
+                                          ⏳
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', color: '#64748b', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                                      {new Date(member.created_at).toLocaleDateString('th-TH')}
+                                    </td>
+                                    <td style={{ padding: '1rem 0.75rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
+                                      {editingMemberId === member.id ? (
+                                        <>
+                                          <button className="btn btn-primary" onClick={handleUpdateMember} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px' }}>
+                                            💾 เซฟ
+                                          </button>
+                                          <button className="btn btn-secondary" onClick={() => setEditingMemberId(null)} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px' }}>
+                                            ❌ ยกเลิก
+                                          </button>
+                                        </>
+                                      ) : (
+                                        <>
+                                          {!member.is_verified && (
+                                            <button
+                                              className="btn"
+                                              style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap', background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', color: '#fff' }}
+                                              onClick={() => handleApproveMember(member.id)}
+                                            >
+                                              ✅ อนุมัติ
+                                            </button>
+                                          )}
+                                          <button
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap' }}
+                                            onClick={() => {
+                                              setEditingMemberId(member.id);
+                                              setEditingMemberData({ position: member.position || '', role: member.role || 'customer', custNum: member.cust_num || '' });
+                                            }}
+                                          >
+                                            ✏️ แก้ไข
+                                          </button>
+                                          <button
+                                            className="btn btn-danger"
+                                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '6px', whiteSpace: 'nowrap' }}
+                                            onClick={() => handleDeleteMember(member.id)}
+                                            disabled={isSelf}
+                                          >
+                                            🗑️ ลบ
+                                          </button>
+                                        </>
+                                      )}
+                                    </td>
+
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Pagination Controls Bottom */}
+                        {totalMembersPages > 1 && (
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={membersPage === 1}
+                              onClick={() => setMembersPage(membersPage - 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              &laquo; ก่อนหน้า
+                            </button>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', padding: '0 1rem', fontWeight: 600 }}>
+                              {membersPage} / {totalMembersPages}
+                            </div>
+
+                            <button 
+                              className="btn btn-secondary" 
+                              disabled={membersPage >= totalMembersPages}
+                              onClick={() => setMembersPage(membersPage + 1)}
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              ถัดไป &raquo;
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    )
-                  )}
+                    );
+                  })()}
 
                   {configSubTab === 'categories' && (
                     <div className="glass-card" style={{ padding: '2rem', textAlign: 'left' }}>
