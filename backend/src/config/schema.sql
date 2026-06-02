@@ -70,7 +70,14 @@ CREATE TABLE IF NOT EXISTS customers (
   id SERIAL PRIMARY KEY,
   cust_num VARCHAR(50) UNIQUE NOT NULL,
   cust_name VARCHAR(150) NOT NULL,
-  contact_email VARCHAR(100)
+  contact_email VARCHAR(100),
+  version VARCHAR(100),
+  license VARCHAR(100),
+  account_owner VARCHAR(100),
+  infor_ma VARCHAR(100),
+  ppcc_app_ma VARCHAR(100),
+  ppcc_cust_ma VARCHAR(100),
+  ppcc_tech_ma VARCHAR(100)
 );
 
 -- Seed baseline Categories

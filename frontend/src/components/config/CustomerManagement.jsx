@@ -13,12 +13,26 @@ const CustomerManagement = () => {
   const [newCustNum, setNewCustNum] = useState('');
   const [newCustName, setNewCustName] = useState('');
   const [newContactEmail, setNewContactEmail] = useState('');
+  const [newVersion, setNewVersion] = useState('');
+  const [newLicense, setNewLicense] = useState('');
+  const [newAccountOwner, setNewAccountOwner] = useState('');
+  const [newInforMA, setNewInforMA] = useState('');
+  const [newPpccAppMA, setNewPpccAppMA] = useState('');
+  const [newPpccCustMA, setNewPpccCustMA] = useState('');
+  const [newPpccTechMA, setNewPpccTechMA] = useState('');
 
   // Edit inline state
   const [editingId, setEditingId] = useState(null);
   const [editingCustNum, setEditingCustNum] = useState('');
   const [editingCustName, setEditingCustName] = useState('');
   const [editingContactEmail, setEditingContactEmail] = useState('');
+  const [editingVersion, setEditingVersion] = useState('');
+  const [editingLicense, setEditingLicense] = useState('');
+  const [editingAccountOwner, setEditingAccountOwner] = useState('');
+  const [editingInforMA, setEditingInforMA] = useState('');
+  const [editingPpccAppMA, setEditingPpccAppMA] = useState('');
+  const [editingPpccCustMA, setEditingPpccCustMA] = useState('');
+  const [editingPpccTechMA, setEditingPpccTechMA] = useState('');
 
   const totalItems = customers.length;
   const totalPages = Math.ceil(totalItems / limit);
@@ -55,7 +69,18 @@ const CustomerManagement = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ cust_num: newCustNum, cust_name: newCustName, contact_email: newContactEmail })
+        body: JSON.stringify({
+          cust_num: newCustNum,
+          cust_name: newCustName,
+          contact_email: newContactEmail,
+          version: newVersion,
+          license: newLicense,
+          account_owner: newAccountOwner,
+          infor_ma: newInforMA,
+          ppcc_app_ma: newPpccAppMA,
+          ppcc_cust_ma: newPpccCustMA,
+          ppcc_tech_ma: newPpccTechMA
+        })
       });
 
       if (!response.ok) {
@@ -67,6 +92,13 @@ const CustomerManagement = () => {
       setNewCustNum('');
       setNewCustName('');
       setNewContactEmail('');
+      setNewVersion('');
+      setNewLicense('');
+      setNewAccountOwner('');
+      setNewInforMA('');
+      setNewPpccAppMA('');
+      setNewPpccCustMA('');
+      setNewPpccTechMA('');
     } catch (err) {
       setError(err.message);
     }
@@ -81,7 +113,18 @@ const CustomerManagement = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ cust_num: editingCustNum, cust_name: editingCustName, contact_email: editingContactEmail })
+        body: JSON.stringify({
+          cust_num: editingCustNum,
+          cust_name: editingCustName,
+          contact_email: editingContactEmail,
+          version: editingVersion,
+          license: editingLicense,
+          account_owner: editingAccountOwner,
+          infor_ma: editingInforMA,
+          ppcc_app_ma: editingPpccAppMA,
+          ppcc_cust_ma: editingPpccCustMA,
+          ppcc_tech_ma: editingPpccTechMA
+        })
       });
 
       if (!response.ok) {
@@ -94,6 +137,13 @@ const CustomerManagement = () => {
       setEditingCustNum('');
       setEditingCustName('');
       setEditingContactEmail('');
+      setEditingVersion('');
+      setEditingLicense('');
+      setEditingAccountOwner('');
+      setEditingInforMA('');
+      setEditingPpccAppMA('');
+      setEditingPpccCustMA('');
+      setEditingPpccTechMA('');
     } catch (err) {
       setError(err.message);
     }
@@ -157,6 +207,62 @@ const CustomerManagement = () => {
           onChange={(e) => setNewContactEmail(e.target.value)}
           style={{ margin: 0, flex: 2, minWidth: '200px' }}
         />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="Version"
+          value={newVersion}
+          onChange={(e) => setNewVersion(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '120px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="License"
+          value={newLicense}
+          onChange={(e) => setNewLicense(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '120px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="Account Owner"
+          value={newAccountOwner}
+          onChange={(e) => setNewAccountOwner(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '120px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="Infor MA"
+          value={newInforMA}
+          onChange={(e) => setNewInforMA(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '100px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="PPCC App_MA"
+          value={newPpccAppMA}
+          onChange={(e) => setNewPpccAppMA(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '100px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="PPCC Cust_MA"
+          value={newPpccCustMA}
+          onChange={(e) => setNewPpccCustMA(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '100px' }}
+        />
+        <input
+          type="text"
+          className="glass-input"
+          placeholder="PPCC Tech_MA"
+          value={newPpccTechMA}
+          onChange={(e) => setNewPpccTechMA(e.target.value)}
+          style={{ margin: 0, flex: 1, minWidth: '100px' }}
+        />
         <button type="submit" className="btn btn-primary" disabled={!newCustNum.trim() || !newCustName.trim()} style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
           ➕ เพิ่มลูกค้า
         </button>
@@ -186,19 +292,25 @@ const CustomerManagement = () => {
       </div>
 
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', color: '#0f172a' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', color: '#0f172a', minWidth: '1300px' }}>
           <thead>
-            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
-              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '20%' }}>Customer Number</th>
-              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '40%' }}>Customer Name</th>
-              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', width: '20%' }}>Contact Email</th>
-              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', width: '20%' }}>Action</th>
+            <tr style={{ borderBottom: '2.5px solid var(--glass-border)', color: '#475569', fontWeight: 600, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em', background: 'rgba(0, 0, 0, 0.015)' }}>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Customer Number</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Customer Name</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Version</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>License</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Account Owner</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Infor MA</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>PPCC App_MA</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>PPCC Cust_MA</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>PPCC Tech_MA</th>
+              <th style={{ padding: '1rem 0.75rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {customers.length === 0 ? (
               <tr>
-                <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลลูกค้า</td>
+                <td colSpan="10" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>ยังไม่มีข้อมูลลูกค้า</td>
               </tr>
             ) : (
               currentCustomers.map(c => (
@@ -212,7 +324,7 @@ const CustomerManagement = () => {
                         className="glass-input"
                         value={editingCustNum}
                         onChange={(e) => setEditingCustNum(e.target.value)}
-                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100px' }}
                       />
                     ) : (
                       c.cust_num
@@ -225,23 +337,101 @@ const CustomerManagement = () => {
                         className="glass-input"
                         value={editingCustName}
                         onChange={(e) => setEditingCustName(e.target.value)}
-                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '200px' }}
                       />
                     ) : (
                       c.cust_name
                     )}
                   </td>
-                  <td style={{ padding: '1rem 0.75rem', color: '#64748b' }}>
+                  <td style={{ padding: '1rem 0.75rem', color: '#475569' }}>
                     {editingId === c.id ? (
                       <input
-                        type="email"
+                        type="text"
                         className="glass-input"
-                        value={editingContactEmail}
-                        onChange={(e) => setEditingContactEmail(e.target.value)}
-                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100%' }}
+                        value={editingVersion}
+                        onChange={(e) => setEditingVersion(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '120px' }}
                       />
                     ) : (
-                      c.contact_email || '-'
+                      c.version || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', color: '#475569' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingLicense}
+                        onChange={(e) => setEditingLicense(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100px' }}
+                      />
+                    ) : (
+                      c.license || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', color: '#475569' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingAccountOwner}
+                        onChange={(e) => setEditingAccountOwner(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '100px' }}
+                      />
+                    ) : (
+                      c.account_owner || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingInforMA}
+                        onChange={(e) => setEditingInforMA(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '80px', textAlign: 'center' }}
+                      />
+                    ) : (
+                      c.infor_ma || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingPpccAppMA}
+                        onChange={(e) => setEditingPpccAppMA(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '80px', textAlign: 'center' }}
+                      />
+                    ) : (
+                      c.ppcc_app_ma || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingPpccCustMA}
+                        onChange={(e) => setEditingPpccCustMA(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '80px', textAlign: 'center' }}
+                      />
+                    ) : (
+                      c.ppcc_cust_ma || '-'
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
+                    {editingId === c.id ? (
+                      <input
+                        type="text"
+                        className="glass-input"
+                        value={editingPpccTechMA}
+                        onChange={(e) => setEditingPpccTechMA(e.target.value)}
+                        style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.95rem', width: '80px', textAlign: 'center' }}
+                      />
+                    ) : (
+                      c.ppcc_tech_ma || '-'
                     )}
                   </td>
                   <td style={{ padding: '0.5rem 0.75rem', textAlign: 'center' }}>
@@ -255,6 +445,13 @@ const CustomerManagement = () => {
                           setEditingCustNum('');
                           setEditingCustName('');
                           setEditingContactEmail('');
+                          setEditingVersion('');
+                          setEditingLicense('');
+                          setEditingAccountOwner('');
+                          setEditingInforMA('');
+                          setEditingPpccAppMA('');
+                          setEditingPpccCustMA('');
+                          setEditingPpccTechMA('');
                         }} style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}>
                           ❌ ยกเลิก
                         </button>
@@ -268,6 +465,13 @@ const CustomerManagement = () => {
                             setEditingCustNum(c.cust_num);
                             setEditingCustName(c.cust_name);
                             setEditingContactEmail(c.contact_email || '');
+                            setEditingVersion(c.version || '');
+                            setEditingLicense(c.license || '');
+                            setEditingAccountOwner(c.account_owner || '');
+                            setEditingInforMA(c.infor_ma || '');
+                            setEditingPpccAppMA(c.ppcc_app_ma || '');
+                            setEditingPpccCustMA(c.ppcc_cust_ma || '');
+                            setEditingPpccTechMA(c.ppcc_tech_ma || '');
                           }}
                           style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', borderRadius: '8px', whiteSpace: 'nowrap' }}
                         >
