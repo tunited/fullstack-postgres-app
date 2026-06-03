@@ -261,3 +261,35 @@ CREATE INDEX IF NOT EXISTS idx_tickets_status ON tickets(status);
 CREATE INDEX IF NOT EXISTS idx_messages_ticket ON messages(ticket_id);
 CREATE INDEX IF NOT EXISTS idx_ticket_attachments_ticket ON ticket_attachments(ticket_id);
 
+-- Seed baseline Customers from Master Data
+INSERT INTO customers VALUES (1, 'ART', 'ART-SERINA PISTON CO., LTD.', 'art.support@ppcc.co.th', 'SL70420', '', 'PPCC', 'x', 'YES', 'x', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (7, 'BISW', 'THE BANGKOK IRON AND STEEL WORKS CO., LTD.', NULL, 'SL10.0.0.421', '25CCL', '', 'x', '', '', '', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (8, 'CCH', 'CHUE CHIN HUA CO., LTD.', NULL, 'SL80311', '80 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (9, 'NST', 'NEW SOMTHAI MOTOR WORK CO., LTD.', NULL, 'SL70420', '50 CCL', 'PPCC', 'x', 'x', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (3, 'NTH', 'NICHICON (THAILAND) CO.,LTD.', 'nth.support@ppcc.co.th', 'SL10 2024.09.01.5', '12 NU', 'HISYS', 'YES', 'YES', 'YES', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (11, 'OTC', 'OGIHARA (THAILAND) CO.,LTD.', NULL, 'SL80010', '40 CCL', 'Infor Direct', 'YES', 'YES', 'x', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (12, 'PK', 'PATKOL PUBLIC CO., LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (13, 'PK-TG', 'TYGIENIC CO.,LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (14, 'PK-HA', 'HEATAWAY CO.,LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (15, 'PK-PKM', 'PATKOL MANUFACTURING CO.,LTD', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (16, 'RXM', 'R.X. MANUFACTURING CO., LTD.', NULL, 'SL70308', '52 CCL', 'PPCC', 'NO', 'YES', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (17, 'SNPR', 'SIAM NPR CO., LTD.', NULL, 'SL80311', '21 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (4, 'SRN', 'SRN SOUND PROOF CO.,LTD', 'srn.support@ppcc.co.th', 'SL90110', '15 CCL', 'PPCC', 'YES', 'x', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (19, 'SST', 'SIAM SENATER CO., LTD.', NULL, 'SL90030', '10 CCL', 'PPCC', 'YES', 'x', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (20, 'TAIYO', 'TAIYO CABLETEC (THAILAND) CO.,LTD.', NULL, 'SL80311', '', 'HISYS', 'YES', 'x', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (21, 'TAK', 'T.A.K.PACKAGING CO., LTD.', NULL, 'SL80311', '69 NU', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (22, 'TTSC', 'THAI TAKAGI SEIKO CO.,LTD.', NULL, 'SL80311', '', 'HISYS', 'YES', 'YES', 'YES', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (41, 'TBFST', 'TBFST', NULL, 'SL10 2023.03.1.7', '', 'PPCC', 'YES', '', '', '', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (2, 'CNI', 'C.N.I ENGINEERING SUPPLY Co., Ltd.', 'cni.support@ppcc.co.th', 'SL10 2022.03.1.8', '', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (43, 'SSMC', 'SSMC', NULL, '', '', '', '', '', 'x', 'x', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (44, 'IIT', 'IIT', NULL, '', '', '', '', '', '', '', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (45, 'CIS', 'CIS', NULL, '', '', '', '', '', '', '', NULL) ON CONFLICT (id) DO NOTHING;
+INSERT INTO customers VALUES (5, 'ADI', 'ADVANCE DIE CASTING CO., LTD.', 'adi.support@ppcc.co.th', 'SL90110', '', '', 'YES', 'YES', '', '', '') ON CONFLICT (id) DO NOTHING;
+
+-- Seed baseline Users from Master Data
+INSERT INTO users VALUES (10, 'tee', 'supachai.athan@gmail.com', '$2a$10$Xe6Qgy0Ph3apKbiwzgJplOkFJ37yPr59BrlH4nljA9wL3Xa07/iHe', 'agent', NULL, '2026-06-02 13:32:36.225101', true) ON CONFLICT (id) DO NOTHING;
+INSERT INTO users VALUES (11, 'somchai', 'supachai.athan@live.com', '$2a$10$VzzqwSpxtjy7eJRKciryOevSJSAG4toOtSf2yYYwo0zdJ9qUO9afS', 'customer', 'ADI', '2026-06-02 13:32:54.76252', true) ON CONFLICT (id) DO NOTHING;
+INSERT INTO users VALUES (1, 'tunited', 'supachai.a@ppcc.co.th', '$2a$10$8TTaP1kOivDx6GiMtmxkv.ez/H2oCQCHZKCBPwE6i3NTc9ygJ5Qr2', 'admin', 'CUST001', '2026-05-26 09:32:28.57279', true) ON CONFLICT (id) DO NOTHING;
+
+SELECT pg_catalog.setval('public.customers_id_seq', 69, true);
+SELECT pg_catalog.setval('public.users_id_seq', 11, true);
