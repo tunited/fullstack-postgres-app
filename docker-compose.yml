@@ -37,7 +37,7 @@ services:
     build:
       context: ./frontend
       args:
-        - VITE_API_URL=http://localhost:5001/api
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5001/api}
     container_name: ppcc-frontend
     ports:
       - "8080:80"
