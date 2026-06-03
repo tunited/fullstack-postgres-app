@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict eafUb9cEJzmSY18VJf2MAVApyOTAMahl62NtxfIc7NCCeD9aqoQQyKKlaLd0WG7
+
 
 -- Dumped from database version 15.18 (Homebrew)
 -- Dumped by pg_dump version 15.18 (Homebrew)
@@ -509,5 +509,5 @@ SELECT pg_catalog.setval('public.users_id_seq', 11, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict eafUb9cEJzmSY18VJf2MAVApyOTAMahl62NtxfIc7NCCeD9aqoQQyKKlaLd0WG7
+
 

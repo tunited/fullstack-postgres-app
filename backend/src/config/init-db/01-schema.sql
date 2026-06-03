@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict G8KXwrfVxLnHYkJRxEMEUMLMHP6Qw4visnVN6OHZxs5n0E56rvqrOLBILLLQpHd
+
 
 -- Dumped from database version 15.18 (Homebrew)
 -- Dumped by pg_dump version 15.18 (Homebrew)
@@ -899,5 +899,5 @@ ALTER TABLE ONLY public.tickets
 -- PostgreSQL database dump complete
 --
 
-\unrestrict G8KXwrfVxLnHYkJRxEMEUMLMHP6Qw4visnVN6OHZxs5n0E56rvqrOLBILLLQpHd
+
 
