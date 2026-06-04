@@ -321,8 +321,14 @@ export const sendTicketCreatedEmail = async (ticket, customerEmail, adminEmails,
     html
   };
  
-  if (ccEmail) {
-    mailOptions.cc = ccEmail;
+  const contractEmail = await getCustomerContractEmail(ticket.cust_num);
+  let finalCc = ccEmail;
+  if (contractEmail) {
+    finalCc = finalCc ? `${finalCc},${contractEmail}` : contractEmail;
+  }
+ 
+  if (finalCc) {
+    mailOptions.cc = finalCc;
   }
  
   return sendMail(mailOptions);
@@ -357,8 +363,14 @@ export const sendTicketUpdatedEmail = async (ticket, toEmail, ccEmail = null, me
     html
   };
 
-  if (ccEmail) {
-    mailOptions.cc = ccEmail;
+  const contractEmail = await getCustomerContractEmail(ticket.cust_num);
+  let finalCc = ccEmail;
+  if (contractEmail) {
+    finalCc = finalCc ? `${finalCc},${contractEmail}` : contractEmail;
+  }
+
+  if (finalCc) {
+    mailOptions.cc = finalCc;
   }
 
   return sendMail(mailOptions);
@@ -380,8 +392,14 @@ export const sendTicketClosedEmail = async (ticket, toEmail, ccEmail = null) => 
     html
   };
 
-  if (ccEmail) {
-    mailOptions.cc = ccEmail;
+  const contractEmail = await getCustomerContractEmail(ticket.cust_num);
+  let finalCc = ccEmail;
+  if (contractEmail) {
+    finalCc = finalCc ? `${finalCc},${contractEmail}` : contractEmail;
+  }
+
+  if (finalCc) {
+    mailOptions.cc = finalCc;
   }
 
   return sendMail(mailOptions);
