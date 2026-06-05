@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-
+\restrict SJfMdzdKrPBiaekYXdsd6hnsEV3Ns5mFlxf1VU0QwicOMDan6nlMJyK1314imUp
 
 -- Dumped from database version 15.18 (Homebrew)
 -- Dumped by pg_dump version 15.18 (Homebrew)
@@ -23,40 +23,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: categories; Type: TABLE; Schema: public; Owner: tunited
---
-
-CREATE TABLE public.categories (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL
-);
-
-
-ALTER TABLE public.categories OWNER TO tunited;
-
---
--- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: tunited
---
-
-CREATE SEQUENCE public.categories_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.categories_id_seq OWNER TO tunited;
-
---
--- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tunited
---
-
-ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
-
-
---
 -- Name: customers; Type: TABLE; Schema: public; Owner: tunited
 --
 
@@ -72,7 +38,7 @@ CREATE TABLE public.customers (
     ppcc_app_ma character varying(100),
     ppcc_cust_ma character varying(100),
     ppcc_tech_ma character varying(100),
-    contract_email character varying(255)
+    prefix character varying(50)
 );
 
 
@@ -424,7 +390,6 @@ CREATE TABLE public.tickets (
     id integer NOT NULL,
     title character varying(200) NOT NULL,
     description text NOT NULL,
-    category character varying(50) DEFAULT 'Technical'::character varying NOT NULL,
     priority character varying(20) DEFAULT 'medium'::character varying NOT NULL,
     status character varying(20) DEFAULT 'open'::character varying NOT NULL,
     customer_id integer,
@@ -486,7 +451,9 @@ CREATE TABLE public.users (
     role character varying(20) DEFAULT 'customer'::character varying NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     is_verified boolean DEFAULT false,
-    cust_num character varying(255)
+    cust_num character varying(255),
+    reset_password_token character varying(255),
+    reset_password_expires timestamp without time zone
 );
 
 
@@ -512,13 +479,6 @@ ALTER TABLE public.users_id_seq OWNER TO tunited;
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-
---
--- Name: categories id; Type: DEFAULT; Schema: public; Owner: tunited
---
-
-ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
 
 
 --
@@ -596,22 +556,6 @@ ALTER TABLE ONLY public.tickets ALTER COLUMN id SET DEFAULT nextval('public.tick
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
-
-
---
--- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: tunited
---
-
-ALTER TABLE ONLY public.categories
-    ADD CONSTRAINT categories_name_key UNIQUE (name);
-
-
---
--- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: tunited
---
-
-ALTER TABLE ONLY public.categories
-    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
 
 
 --
@@ -899,5 +843,5 @@ ALTER TABLE ONLY public.tickets
 -- PostgreSQL database dump complete
 --
 
-
+\unrestrict SJfMdzdKrPBiaekYXdsd6hnsEV3Ns5mFlxf1VU0QwicOMDan6nlMJyK1314imUp
 

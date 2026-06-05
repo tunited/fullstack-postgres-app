@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-
+\restrict chSB9DgbdGuZXCZEGq3nhvrgqdGtCTa9WftNVmaykIjuuOzcNxfeBphPSbUHp9C
 
 -- Dumped from database version 15.18 (Homebrew)
 -- Dumped by pg_dump version 15.18 (Homebrew)
@@ -19,41 +19,33 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: tunited
---
-
-INSERT INTO public.categories VALUES (1, 'Technical');
-INSERT INTO public.categories VALUES (2, 'Functional');
-INSERT INTO public.categories VALUES (3, 'Administrator');
-
-
---
 -- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: tunited
 --
 
-INSERT INTO public.customers VALUES (1, 'ART', 'ART-SERINA PISTON CO., LTD.', 'art.support@ppcc.co.th', 'SL70420', '', 'PPCC', 'x', 'YES', 'x', 'YES', NULL);
-INSERT INTO public.customers VALUES (7, 'BISW', 'THE BANGKOK IRON AND STEEL WORKS CO., LTD.', NULL, 'SL10.0.0.421', '25CCL', '', 'x', '', '', '', NULL);
-INSERT INTO public.customers VALUES (8, 'CCH', 'CHUE CHIN HUA CO., LTD.', NULL, 'SL80311', '80 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (9, 'NST', 'NEW SOMTHAI MOTOR WORK CO., LTD.', NULL, 'SL70420', '50 CCL', 'PPCC', 'x', 'x', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (3, 'NTH', 'NICHICON (THAILAND) CO.,LTD.', 'nth.support@ppcc.co.th', 'SL10 2024.09.01.5', '12 NU', 'HISYS', 'YES', 'YES', 'YES', 'x', NULL);
-INSERT INTO public.customers VALUES (11, 'OTC', 'OGIHARA (THAILAND) CO.,LTD.', NULL, 'SL80010', '40 CCL', 'Infor Direct', 'YES', 'YES', 'x', 'YES', NULL);
-INSERT INTO public.customers VALUES (12, 'PK', 'PATKOL PUBLIC CO., LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (13, 'PK-TG', 'TYGIENIC CO.,LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (14, 'PK-HA', 'HEATAWAY CO.,LTD.', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (15, 'PK-PKM', 'PATKOL MANUFACTURING CO.,LTD', NULL, 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (16, 'RXM', 'R.X. MANUFACTURING CO., LTD.', NULL, 'SL70308', '52 CCL', 'PPCC', 'NO', 'YES', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (17, 'SNPR', 'SIAM NPR CO., LTD.', NULL, 'SL80311', '21 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (4, 'SRN', 'SRN SOUND PROOF CO.,LTD', 'srn.support@ppcc.co.th', 'SL90110', '15 CCL', 'PPCC', 'YES', 'x', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (19, 'SST', 'SIAM SENATER CO., LTD.', NULL, 'SL90030', '10 CCL', 'PPCC', 'YES', 'x', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (20, 'TAIYO', 'TAIYO CABLETEC (THAILAND) CO.,LTD.', NULL, 'SL80311', '', 'HISYS', 'YES', 'x', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (21, 'TAK', 'T.A.K.PACKAGING CO., LTD.', NULL, 'SL80311', '69 NU', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (22, 'TTSC', 'THAI TAKAGI SEIKO CO.,LTD.', NULL, 'SL80311', '', 'HISYS', 'YES', 'YES', 'YES', 'x', NULL);
-INSERT INTO public.customers VALUES (41, 'TBFST', 'TBFST', NULL, 'SL10 2023.03.1.7', '', 'PPCC', 'YES', '', '', '', NULL);
-INSERT INTO public.customers VALUES (2, 'CNI', 'C.N.I ENGINEERING SUPPLY Co., Ltd.', 'cni.support@ppcc.co.th', 'SL10 2022.03.1.8', '', 'PPCC', 'YES', 'YES', 'YES', 'YES', NULL);
-INSERT INTO public.customers VALUES (43, 'SSMC', 'SSMC', NULL, '', '', '', '', '', 'x', 'x', NULL);
-INSERT INTO public.customers VALUES (44, 'IIT', 'IIT', NULL, '', '', '', '', '', '', '', NULL);
-INSERT INTO public.customers VALUES (45, 'CIS', 'CIS', NULL, '', '', '', '', '', '', '', NULL);
-INSERT INTO public.customers VALUES (5, 'ADI', 'ADVANCE DIE CASTING CO., LTD.', 'adi.support@ppcc.co.th', 'SL90110', '', '', 'YES', 'YES', '', '', '');
+INSERT INTO public.customers VALUES (70, 'PKF', 'PATKOL FOOD INDUSTRY PARTNER CO., LTD.', 'test.support@ppcc.co.th', 'SL90020', '680NU', 'PPCC', 'NO', 'x', 'YES', 'YES', 'PKF');
+INSERT INTO public.customers VALUES (5, 'ADI', 'ADVANCE DIE CASTING CO., LTD.', 'test.support@ppcc.co.th', 'SL90110', '', '', 'YES', 'YES', '', '', 'ADI');
+INSERT INTO public.customers VALUES (1, 'ART', 'ART-SERINA PISTON CO., LTD.', 'test.support@ppcc.co.th', 'SL70420', '', 'PPCC', 'x', 'YES', 'x', 'YES', 'ART');
+INSERT INTO public.customers VALUES (2, 'CNI', 'C.N.I ENGINEERING SUPPLY Co., Ltd.', 'test.support@ppcc.co.th', 'SL10 2022.03.1.8', '', 'PPCC', 'YES', 'YES', 'YES', 'YES', 'CNI');
+INSERT INTO public.customers VALUES (8, 'CCH', 'CHUE CHIN HUA CO., LTD.', 'test.support@ppcc.co.th', 'SL80311', '80 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', 'CCH');
+INSERT INTO public.customers VALUES (45, 'CIS', 'CIS', 'test.support@ppcc.co.th', '', '', '', '', '', '', '', 'CIS');
+INSERT INTO public.customers VALUES (14, 'PK-HA', 'HEATAWAY CO.,LTD.', 'test.support@ppcc.co.th', 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', 'HA');
+INSERT INTO public.customers VALUES (44, 'IIT', 'IIT', 'test.support@ppcc.co.th', '', '', '', '', '', '', '', 'IIT');
+INSERT INTO public.customers VALUES (9, 'NST', 'NEW SOMTHAI MOTOR WORK CO., LTD.', 'test.support@ppcc.co.th', 'SL70420', '50 CCL', 'PPCC', 'x', 'x', 'x', 'x', 'NST');
+INSERT INTO public.customers VALUES (3, 'NTH', 'NICHICON (THAILAND) CO.,LTD.', 'test.support@ppcc.co.th', 'SL10 2024.09.01.5', '12 NU', 'HISYS', 'YES', 'YES', 'YES', 'x', 'NTH');
+INSERT INTO public.customers VALUES (11, 'OTC', 'OGIHARA (THAILAND) CO.,LTD.', 'test.support@ppcc.co.th', 'SL80010', '40 CCL', 'Infor Direct', 'YES', 'YES', 'x', 'YES', 'OTC');
+INSERT INTO public.customers VALUES (15, 'ICE', 'PATKOL ICE SOLUTIONS CO.,LTD.', 'test.support@ppcc.co.th', 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', 'ICE');
+INSERT INTO public.customers VALUES (12, 'PK', 'PATKOL PUBLIC CO., LTD.', 'test.support@ppcc.co.th', 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', 'PK');
+INSERT INTO public.customers VALUES (16, 'RX', 'R.X. MANUFACTURING CO., LTD.', 'test.support@ppcc.co.th', 'SL70308', '52 CCL', 'PPCC', 'NO', 'YES', 'x', 'x', 'RX');
+INSERT INTO public.customers VALUES (17, 'SNPR', 'SIAM NPR CO., LTD.', 'test.support@ppcc.co.th', 'SL80311', '21 CCL', 'PPCC', 'YES', 'YES', 'YES', 'YES', 'SNPR');
+INSERT INTO public.customers VALUES (19, 'SST', 'SIAM SENATER CO., LTD.', 'test.support@ppcc.co.th', 'SL90030', '10 CCL', 'PPCC', 'YES', 'x', 'x', 'x', 'SST');
+INSERT INTO public.customers VALUES (4, 'SRN', 'SRN SOUND PROOF CO.,LTD', 'test.support@ppcc.co.th', 'SL90110', '15 CCL', 'PPCC', 'YES', 'x', 'x', 'x', 'SRN');
+INSERT INTO public.customers VALUES (43, 'SSMC', 'SSMC', 'test.support@ppcc.co.th', '', '', '', '', '', 'x', 'x', 'SSMC');
+INSERT INTO public.customers VALUES (21, 'TAK', 'T.A.K.PACKAGING CO., LTD.', 'test.support@ppcc.co.th', 'SL80311', '69 NU', 'PPCC', 'YES', 'YES', 'YES', 'YES', 'TAK');
+INSERT INTO public.customers VALUES (20, 'TAIYO', 'TAIYO CABLETEC (THAILAND) CO.,LTD.', 'test.support@ppcc.co.th', 'SL80311', '', 'HISYS', 'YES', 'x', 'x', 'x', 'TAIYO');
+INSERT INTO public.customers VALUES (41, 'TBFST', 'TBFST', 'test.support@ppcc.co.th', 'SL10 2023.03.1.7', '', 'PPCC', 'YES', '', '', '', 'TBFS');
+INSERT INTO public.customers VALUES (22, 'TTSC', 'THAI TAKAGI SEIKO CO.,LTD.', 'test.support@ppcc.co.th', 'SL80311', '', 'HISYS', 'YES', 'YES', 'YES', 'x', 'TTSC');
+INSERT INTO public.customers VALUES (7, 'BISW', 'THE BANGKOK IRON AND STEEL WORKS CO., LTD.', 'test.support@ppcc.co.th', 'SL10.0.0.421', '25CCL', '', 'x', '', '', '', 'BISW');
+INSERT INTO public.customers VALUES (13, 'PK-TG', 'TYGIENIC CO.,LTD.', 'test.support@ppcc.co.th', 'SL90020', '680 NU', 'PPCC', 'YES', 'x', 'YES', 'YES', 'TG');
 
 
 --
@@ -444,23 +436,16 @@ INSERT INTO public.roles VALUES (3, 'Admin', 'admin');
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: tunited
 --
 
-INSERT INTO public.users VALUES (10, 'tee', 'supachai.athan@gmail.com', '$2a$10$Xe6Qgy0Ph3apKbiwzgJplOkFJ37yPr59BrlH4nljA9wL3Xa07/iHe', 'agent', '2026-06-02 13:32:36.225101', true, NULL);
-INSERT INTO public.users VALUES (11, 'somchai', 'supachai.athan@live.com', '$2a$10$VzzqwSpxtjy7eJRKciryOevSJSAG4toOtSf2yYYwo0zdJ9qUO9afS', 'Customer', '2026-06-02 13:32:54.76252', true, 'ADI');
-INSERT INTO public.users VALUES (1, 'tunited', 'supachai.a@ppcc.co.th', '$2a$10$8TTaP1kOivDx6GiMtmxkv.ez/H2oCQCHZKCBPwE6i3NTc9ygJ5Qr2', 'Admin', '2026-05-26 09:32:28.57279', true, 'CUST001');
-
-
---
--- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tunited
---
-
-SELECT pg_catalog.setval('public.categories_id_seq', 12, true);
+INSERT INTO public.users VALUES (10, 'tee', 'supachai.athan@gmail.com', '$2a$10$Xe6Qgy0Ph3apKbiwzgJplOkFJ37yPr59BrlH4nljA9wL3Xa07/iHe', 'agent', '2026-06-02 13:32:36.225101', true, NULL, NULL, NULL);
+INSERT INTO public.users VALUES (1, 'tunited', 'supachai.a@ppcc.co.th', '$2a$10$8TTaP1kOivDx6GiMtmxkv.ez/H2oCQCHZKCBPwE6i3NTc9ygJ5Qr2', 'Admin', '2026-05-26 09:32:28.57279', true, 'CUST001', NULL, NULL);
+INSERT INTO public.users VALUES (11, 'somchai', 'supachai.athan@live.com', '$2a$10$VzzqwSpxtjy7eJRKciryOevSJSAG4toOtSf2yYYwo0zdJ9qUO9afS', 'Customer', '2026-06-02 13:32:54.76252', true, 'ADI', '9d69c77414c9895c41282dc848ce5629317f2e4cbc5d4a0fe43f3c9dcacb6868', '2026-06-05 00:40:32.81');
 
 
 --
 -- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tunited
 --
 
-SELECT pg_catalog.setval('public.customers_id_seq', 69, true);
+SELECT pg_catalog.setval('public.customers_id_seq', 70, true);
 
 
 --
@@ -509,5 +494,5 @@ SELECT pg_catalog.setval('public.users_id_seq', 11, true);
 -- PostgreSQL database dump complete
 --
 
-
+\unrestrict chSB9DgbdGuZXCZEGq3nhvrgqdGtCTa9WftNVmaykIjuuOzcNxfeBphPSbUHp9C
 
