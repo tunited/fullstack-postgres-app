@@ -5,7 +5,6 @@ import ProgramTypeManagement from '../components/config/ProgramTypeManagement';
 import IssueTypeManagement from '../components/config/IssueTypeManagement';
 import ModuleProgramManagement from '../components/config/ModuleProgramManagement';
 import SupportStatManagement from '../components/config/SupportStatManagement';
-import CreateTicketModal from '../components/CreateTicketModal';
 
 export default function AgentDashboard({ onViewTicket, initialTab = 'queue', refreshKey }) {
   const { user, token, API_URL } = useAuth();

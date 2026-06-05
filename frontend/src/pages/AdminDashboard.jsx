@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import CreateTicketModal from '../components/CreateTicketModal';
 
-import CreateTicketModal from '../components/CreateTicketModal';
 
 export default function AdminDashboard({ onNavigateToTickets, onViewTicket, refreshKey }) {
   const { user, API_URL } = useAuth();
